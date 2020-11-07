@@ -1,0 +1,121 @@
+%--------------------------------------------------------------------------------%
+\NeedsTeXFormat{LaTeX2e}%
+\ProvidesPackage{jcvcurve}[2005/09/14 v1.10 Curriculum Vitae class for LaTeX2e]%
+\RequirePackage{ltxtable}%
+\RequirePackage{calc}%
+%--------------------------------------------------------------------------------%
+\newif\ifstrok\strokfalse%
+\def\strtest#1#2{%
+  \def\@strone{#1}\def\@strtwo{#2}%
+  \ifstrok\else\ifx\@strone\@strtwo\stroktrue\fi\fi}%
+%--------------------------------------------------------------------------------%
+\def\header@scale{.5}%
+\newcommand\headerscale[1]{\gdef\header@scale{#1}}%
+\@onlypreamble\headerscale%
+%--------------------------------------------------------------------------------%
+\newlength\headerspace%
+\setlength\headerspace{10pt}%
+%--------------------------------------------------------------------------------%
+\newcommand\leftheader[1]{\gdef\@leftheader{#1}}%
+\@onlypreamble\leftheader%
+\newcommand\rightheader[1]{\gdef\@rightheader{#1}}%
+\@onlypreamble\rightheader%
+%--------------------------------------------------------------------------------%
+\def\photo@scale{.1}%
+\newcommand\photoscale[1]{\gdef\photo@scale{#1}}%
+\@onlypreamble\photoscale%
+%--------------------------------------------------------------------------------%
+\newlength\photosep%
+\setlength\photosep{10pt}%
+%--------------------------------------------------------------------------------%
+\newcommand\photo[2][l]{%
+  \RequirePackage{graphicx}%
+  \strokfalse\strtest{#1}{l}\strtest{#1}{r}\strtest{#1}{c}%
+  \ifstrok\else\ClassError{curve}{Invalid argument to \protect\photo}{%
+    Argument 2 of \protect\photo must be `l', `r' or `c'.}\fi%
+  \def\tmp@cmd{\global\let\makeheaders@}%
+  \expandafter\tmp@cmd\csname makeheaders@#1\endcsname%
+  \gdef\photo@file{#2}}%
+\@onlypreamble\photo%
+%--------------------------------------------------------------------------------%
+\newlength\photo@width%
+\def\includephoto@t{%
+  \raisebox{.7\baselineskip-\height}{%
+    \includegraphics[width=\photo@width]{\photo@file}}}%
+%--------------------------------------------------------------------------------%
+\def\includephoto@c{%
+  \raisebox{-.5\height}{%
+    \includegraphics[width=\photo@width]{\photo@file}}}%
+%--------------------------------------------------------------------------------%
+\def\includephoto@b{\includegraphics[width=\photo@width]{\photo@file}}%
+%--------------------------------------------------------------------------------%
+\newlength\leftheader@width%
+\newlength\rightheader@width%
+%--------------------------------------------------------------------------------%
+\def\makeheaders@l#1{%
+  \setlength\photo@width{\photo@scale\textwidth}%
+  \setlength\leftheader@width{%
+    (\textwidth - \photo@width - \photosep) * \real{\header@scale}}%
+  \setlength\rightheader@width{%
+    \textwidth - \photo@width - \photosep - \leftheader@width}%
+  \parbox[#1]{\photo@width + \photosep}{\includephoto@\hspace\photosep}%
+  \parbox[#1]{\leftheader@width}{\@leftheader}%
+  \parbox[#1]{\rightheader@width}{\raggedleft\@rightheader}}%
+%--------------------------------------------------------------------------------%
+\def\makeheaders@c#1{%
+  \setlength\photo@width{\photo@scale\textwidth}%
+  \setlength\leftheader@width{(\textwidth - \photo@width) * \real{.5}}%
+  \setlength\rightheader@width{\leftheader@width}%
+  \parbox[#1]{\leftheader@width}{\@leftheader}%
+  \parbox[#1]{\photo@width}{\includephoto@}%
+  \parbox[#1]{\rightheader@width}{\raggedleft\@rightheader}}%
+%--------------------------------------------------------------------------------%
+\def\makeheaders@r#1{%
+  \setlength\photo@width{\photo@scale\textwidth}%
+  \setlength\leftheader@width{%
+    (\textwidth - \photo@width - \photosep) * \real{\header@scale}}%
+  \setlength\rightheader@width{%
+    \textwidth - \photo@width - \photosep - \leftheader@width}%
+  \parbox[#1]{\leftheader@width}{\@leftheader}%
+  \parbox[#1]{\rightheader@width}{\raggedleft\@rightheader}%
+  \parbox[#1]{\photo@width + \photosep}{\hspace\photosep\includephoto@}}%
+%--------------------------------------------------------------------------------%
+\def\makeheaders@#1{%
+  \setlength\leftheader@width{\header@scale\textwidth}%
+  \setlength\rightheader@width{\textwidth - \leftheader@width}%
+  \parbox[#1]{\leftheader@width}{\@leftheader}%
+  \parbox[#1]{\rightheader@width}{\raggedleft\@rightheader}}%
+%--------------------------------------------------------------------------------%
+\newcommand\makeheaders[1][c]{%
+  \strokfalse\strtest{#1}{t}\strtest{#1}{b}\strtest{#1}{c}%
+  \ifstrok\else\ClassError{curve}{Invalid argument to \protect\makeheaders}{%
+    Argument of \protect\makeheaders must be `t', `b' or `c'.}\fi%
+  \def\tmp@cmd{\global\let\includephoto@}%
+  \expandafter\tmp@cmd\csname includephoto@#1\endcsname%
+  \makeheaders@{#1}%
+  \par\vspace\headerspace}%
+\@onlypreamble\title
+%--------------------------------------------------------------------------------%
+\def\@titlefont{\Huge\bfseries}
+\newcommand\titlefont[1]{\gdef\@titlefont{#1}}
+\@onlypreamble\titlefont
+
+\newlength\titlespace
+\setlength\titlespace{0pt}
+
+\let\@subtitle\@undefined
+\newcommand\subtitle[1]{\gdef\@subtitle{#1}}
+\@onlypreamble\subtitle
+
+\def\@subtitlefont{\huge\itshape}
+\newcommand\subtitlefont[1]{\gdef\@subtitlefont{#1}}
+\@onlypreamble\subtitlefont
+
+\renewcommand\maketitle{%
+  \begin{center}
+    {\@titlefont\@title}
+    \ifx\@subtitle\@undefined\else\\\@subtitlefont\@subtitle\fi
+  \end{center}
+  \vspace\titlespace}
+
+\endinput%
