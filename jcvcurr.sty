@@ -1,0 +1,72 @@
+%--------------------------------------------------------------------------------%
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]%
+\ProvidesPackage{jcvcurr}[2006/07/20]%
+\RequirePackage[TextAligned]{currvita}%
+\RequirePackage{ifthen}%
+\RequirePackage[a4paper,top=3.5cm,left=3cm,right=3cm,bottom=2.5cm]{geometry}
+\RequirePackage{currvita}
+\RequirePackage{jcvcurve}
+%--------------------------------------------------------------------------------%
+\typeout{teste do juliano}%
+\typeout{ }%
+%--------------------------------------------------------------------------------%
+\parindent=0cm
+\pagestyle{empty}%
+\pagenumbering{}%
+%--------------------------------------------------------------------------------%
+\newlength{\jcvlabelwidth}%
+\settowidth{\jcvlabelwidth}{$\bullet$}%
+\newenvironment{jcvlist1}{%
+  \begin{list}{}{%
+      \setlength{\topsep}{0ex}%
+      \setlength{\partopsep}{0ex}%
+      \setlength{\itemsep}{0ex}%
+      \setlength{\parsep}{0ex}%
+      \setlength{\leftmargin}{0em}%
+%      \setlength{\rightmargin}{0em}%
+      \setlength{\listparindent}{0em}%
+      \setlength{\itemindent}{0em}%
+      \setlength{\labelsep}{0em}}%
+}{%
+  \end{list}%
+}%
+\newenvironment{jcvlist2}{%
+  \begin{list}{$\bullet$}{%
+      \setlength{\topsep}{0ex}%
+      \setlength{\partopsep}{0ex}%
+      \setlength{\itemsep}{0ex}%
+      \setlength{\parsep}{0ex}%
+%      \setlength{\rightmargin}{0em}%
+      \setlength{\listparindent}{0em}%
+      \setlength{\itemindent}{0em}%
+      \setlength{\labelsep}{.5em}%
+      \setlength{\leftmargin}{\jcvlabelwidth}%
+      \addtolength{\leftmargin}{\labelsep}}%
+}{%
+  \end{list}%
+}%
+%--------------------------------------------------------------------------------%
+\newenvironment{institution}[3]{%
+  \item[#1]%
+  \begin{jcvlist1}%
+    \item #2 - #3%
+    \begin{jcvlist2}%
+}{%
+    \end{jcvlist2}%
+  \end{jcvlist1}%
+}%
+%--------------------------------------------------------------------------------%
+\newenvironment{job}[4]{%
+  \item[#1]%
+  \begin{jcvlist1}%
+    \item #2 - #3%
+    \item \textbf{#4}%
+    \begin{jcvlist2}%
+}{%
+    \end{jcvlist2}%
+  \end{jcvlist1}%
+}%
+
+%--------------------------------------------------------------------------------%
+\endinput%
+%--------------------------------------------------------------------------------%
